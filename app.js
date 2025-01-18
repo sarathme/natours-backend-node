@@ -98,6 +98,11 @@ app.use(
 
 app.use(compression());
 
+app.use((req, res, next) => {
+  console.log(req.cookies.jwt);
+  next();
+});
+
 // Test middleware
 app.use((req, res, next) => {
   req.requestTime = new Date().toISOString();

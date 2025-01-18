@@ -13,20 +13,21 @@ const razorpay = new Razorpay({
 
 exports.getCheckoutSession = catchAsync(async (req, res, next) => {
   // 1) Get the currently booked tour
-  const tour = await Tour.findById(req.params.tourId);
+
+  console.log('body', req.body);
+  const tour = await Tour.findById(req.body.tourId);
 
   console.log(tour);
   // console.log(tour);
 
   // 2) Create order
   try {
-    const { price, id } = tour;
-    console.log(req.user);
+    const { price } = tour;
 
     const options = {
-      amount: price * 100, // Example: 50000 for ₹500
-      currency: 'INR', // INR, USD, etc.
-      receipt: `${Date.now()}-${req.user._id}`, // Unique identifier
+      amount: price * 100,
+      currency: 'USD',
+      receipt: `${Date.now()}-${req.user._id}`,
     };
 
     const order = await razorpay.orders.create(options);

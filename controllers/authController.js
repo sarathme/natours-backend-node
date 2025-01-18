@@ -69,10 +69,16 @@ exports.login = catchAsync(async (req, res, next) => {
 });
 
 exports.logout = (req, res) => {
+  console.log(req.cookies.jwt);
   res.cookie('jwt', 'loggedout', {
-    expires: new Date(Date.now() + 10 * 1000),
+    expires: new Date(
+      Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 10 * 1000,
+    ),
     httpOnly: true,
+    secure: req.secure || req.headers['x-forwarded-proto'] === 'https',
   });
+
+  console.log(req.cookies.jwt);
   res.status(200).json({ status: 'success' });
 };
 
@@ -88,7 +94,8 @@ exports.protect = catchAsync(async (req, res, next) => {
     token = req.cookies.jwt;
   }
 
-  if (!token) {
+  console.log(token);
+  if (!token || token === 'null') {
     return next(
       new AppError('You are not logged in! Please log in to get access.', 401),
     );
