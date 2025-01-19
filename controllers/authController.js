@@ -21,6 +21,7 @@ const createSendToken = (user, statusCode, req, res) => {
     ),
     httpOnly: true,
     secure: req.secure || req.headers['x-forwarded-proto'] === 'https',
+    sameSite: 'None',
   });
 
   // Remove password from output
@@ -69,7 +70,6 @@ exports.login = catchAsync(async (req, res, next) => {
 });
 
 exports.logout = (req, res) => {
-  console.log(req.cookies.jwt);
   res.cookie('jwt', 'loggedout', {
     expires: new Date(
       Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 10 * 1000,
@@ -78,7 +78,6 @@ exports.logout = (req, res) => {
     secure: req.secure || req.headers['x-forwarded-proto'] === 'https',
   });
 
-  console.log(req.cookies.jwt);
   res.status(200).json({ status: 'success' });
 };
 
@@ -94,7 +93,6 @@ exports.protect = catchAsync(async (req, res, next) => {
     token = req.cookies.jwt;
   }
 
-  console.log(token);
   if (!token || token === 'null') {
     return next(
       new AppError('You are not logged in! Please log in to get access.', 401),

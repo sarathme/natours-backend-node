@@ -14,11 +14,7 @@ const razorpay = new Razorpay({
 exports.getCheckoutSession = catchAsync(async (req, res, next) => {
   // 1) Get the currently booked tour
 
-  console.log('body', req.body);
   const tour = await Tour.findById(req.body.tourId);
-
-  console.log(tour);
-  // console.log(tour);
 
   // 2) Create order
   try {
