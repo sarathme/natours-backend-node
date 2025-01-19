@@ -99,7 +99,7 @@ app.use(
 app.use(compression());
 
 app.use((req, res, next) => {
-  console.log(req.cookies.jwt);
+  console.log('Middleware', req.cookies.jwt);
   next();
 });
 
