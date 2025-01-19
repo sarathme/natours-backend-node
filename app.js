@@ -32,7 +32,7 @@ app.set('views', path.join(__dirname, 'views'));
 // Implement CORS
 app.use(
   cors({
-    origin: 'http://localhost:5173',
+    origin: process.env.FRONTEND_URL,
     credentials: true,
   }),
 );
@@ -118,6 +118,7 @@ app.use('/api/v1/reviews', reviewRouter);
 app.use('/api/v1/bookings', bookingRouter);
 
 app.all('*', (req, res, next) => {
+  console.log(req.originalUrl);
   next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
 });
 
