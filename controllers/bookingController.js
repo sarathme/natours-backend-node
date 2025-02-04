@@ -14,10 +14,9 @@ const razorpay = new Razorpay({
 exports.getCheckoutSession = catchAsync(async (req, res, next) => {
   // 1) Get the currently booked tour
 
-  const tour = await Tour.findById(req.body.tourId);
-
   // 2) Create order
   try {
+    const tour = await Tour.findById(req.body.tourId);
     const { price } = tour;
 
     const options = {
@@ -27,6 +26,8 @@ exports.getCheckoutSession = catchAsync(async (req, res, next) => {
     };
 
     const order = await razorpay.orders.create(options);
+
+    console.log(order);
     // 3) Create session as response
     res.status(200).json({
       status: 'success',
