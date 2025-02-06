@@ -93,10 +93,8 @@ exports.protect = catchAsync(async (req, res, next) => {
     req.headers.authorization.startsWith('Bearer')
   ) {
     token = req.headers.authorization.split(' ')[1];
-  } else if (req.cookies.jwt) {
-    token = req.cookies.jwt;
   }
-  console.log('protect', token);
+
   if (!token || token === 'null') {
     return next(
       new AppError('You are not logged in! Please log in to get access.', 401),
